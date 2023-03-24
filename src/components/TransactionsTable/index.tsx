@@ -1,8 +1,11 @@
+import { SearchForm } from "./SearchForm";
 import { PriceHighlight, Table, TransactionContainer } from "./styles";
 
 export function TransactionsTable() {
     return (
         <TransactionContainer>
+            <SearchForm />
+
             <Table>
                 <tbody>
 
