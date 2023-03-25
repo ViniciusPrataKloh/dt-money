@@ -15,6 +15,30 @@
             "type": "outcome",
             "category": "Alimentação",
             "createdAt": "2023-03-24T13:59:28.028Z"
+        },
+        {
+            "id": "3",
+            "description": "Peça de carro",
+            "price": "200",
+            "type": "outcome",
+            "category": "Manutenção",
+            "createdAt": "2023-02-01T13:59:28.028Z"
+        },
+        {
+            "id": "4",
+            "description": "Dividendos",
+            "price": "400",
+            "type": "income",
+            "category": "Rendimentos",
+            "createdAt": "2023-02-28T13:59:28.028Z"
+        },
+        {
+            "id": "5",
+            "description": "Dividendos",
+            "price": "400",
+            "type": "income",
+            "category": "Rendimentos",
+            "createdAt": "2023-01-31T13:59:28.028Z"
         }
     ]
 }

@@ -1,5 +1,6 @@
 import { format, parseISO } from "date-fns";
 import { useEffect, useState } from "react";
+import { Loading } from "../Loading";
 import { SearchForm } from "./SearchForm";
 import { PriceHighlight, Table, TransactionContainer } from "./styles";
 
@@ -14,14 +15,10 @@ interface ITransactions {
 
 export function TransactionsTable() {
     const [transactions, setTransactions] = useState<ITransactions[]>([]);
+    const [filter, setFilter] = useState<string>("");
+    const [isLoadingTransactions, setIsloadingTransactions] = useState<boolean>(false);
 
-    async function loadTransactions() {
-        const response = await fetch('http://localhost:3000/transactions');
-        const data = await response.json();
-        console.log(data);
-
-        setTransactions(data);
-    }
+    console.log(isLoadingTransactions);
 
     function formatDateToString(dateToFormat: Date): string {
         const parsedDate = parseISO(dateToFormat.toString());
@@ -39,6 +36,19 @@ export function TransactionsTable() {
         return formatter.format(priceToFormat);
     }
 
+    async function loadTransactions() {
+        setIsloadingTransactions(true);
+
+        if (filter === "") {
+            const response = await fetch('http://localhost:3000/transactions');
+            const data = await response.json();
+            console.log(data);
+            setTransactions(data);
+        }
+
+        setIsloadingTransactions(false);
+    }
+
     useEffect(() => {
         loadTransactions();
     }, []);
@@ -48,24 +58,27 @@ export function TransactionsTable() {
         <TransactionContainer>
             <SearchForm />
 
-            <Table>
-                <tbody>
+            {isLoadingTransactions
+                ? <Loading />
+                : <Table>
+                    <tbody>
 
-                    {transactions.map((transaction) => {
-                        return (
-                            <tr key={transaction.id}>
-                                <td width="50%">{transaction.description}</td>
-                                <td>
-                                    <PriceHighlight variant={transaction.type}>{formatPrice(transaction.price)}</PriceHighlight>
-                                </td>
-                                <td>{transaction.category}</td>
-                                <td>{formatDateToString(transaction.createdAt)}</td>
-                            </tr>
-                        )
-                    })}
+                        {transactions.map((transaction) => {
+                            return (
+                                <tr key={transaction.id}>
+                                    <td width="50%">{transaction.description}</td>
+                                    <td>
+                                        <PriceHighlight variant={transaction.type}>{formatPrice(transaction.price)}</PriceHighlight>
+                                    </td>
+                                    <td>{transaction.category}</td>
+                                    <td>{formatDateToString(transaction.createdAt)}</td>
+                                </tr>
+                            )
+                        })}
 
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            }
         </TransactionContainer>
     )
 }
