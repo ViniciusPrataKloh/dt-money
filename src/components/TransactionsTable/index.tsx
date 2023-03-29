@@ -22,7 +22,7 @@ export function TransactionsTable() {
                                     <td width="50%">{transaction.description}</td>
                                     <td>
                                         <PriceHighlight variant={transaction.type}>
-                                            {formatPrice(transaction.price)}
+                                            {formatPrice(transaction.price.toString())}
                                         </PriceHighlight>
                                     </td>
                                     <td>{transaction.category}</td>

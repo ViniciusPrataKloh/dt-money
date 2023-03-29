@@ -14,11 +14,10 @@ interface ITransactionsContext {
     transactions: ITransactions[];
     isLoadingTransactions: boolean;
     handleSetTransactions: (transactions: ITransactions[]) => void;
-    getTotal: () => number;
-    getTotalIncome: () => number;
-    getTotalOutcome: () => number;
+    getTotal: () => string;
+    getTotalByType: (type: 'income' | 'outcome') => string;
     formatDateToString: (dateToFormat: Date) => string;
-    formatPrice(priceToFormat: number): string
+    formatPrice(priceToFormat: string): string
 }
 
 interface ITransactionsContextProviderProps {
@@ -37,35 +36,24 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
         // setTransactions(state => [...state, data]);
     }
 
-    function getTotal(): number {
-        let total = 0;
-        transactions.forEach((transaction) => {
-            total += transaction.price;
-        });
+    function getTotal(): string {
+        const totalIncomeTransaction = getTotalByType('income');
+        const totalOutcomeTransaction = getTotalByType('outcome');
 
-        return total;
+        const total = (Number(totalIncomeTransaction) - Number(totalOutcomeTransaction));
+
+        return total.toString();
     }
 
-    function getTotalIncome(): number {
+    function getTotalByType(type: 'income' | 'outcome'): string {
         let total = 0;
-        const incomeTransactions = transactions.filter((transaction) => transaction.category === 'income');
+        const transactionsType = transactions.filter((transaction) => transaction.type === type);
 
-        incomeTransactions.forEach((transaction) => {
-            total += transaction.price;
+        transactionsType.forEach((transaction) => {
+            total += Number(transaction.price);
         });
 
-        return total;
-    }
-
-    function getTotalOutcome(): number {
-        let total = 0;
-        const outcomeTransactions = transactions.filter((transaction) => transaction.category === 'outcome');
-
-        outcomeTransactions.forEach((transaction) => {
-            total += transaction.price;
-        });
-
-        return total;
+        return total.toString();
     }
 
     function formatDateToString(dateToFormat: Date): string {
@@ -75,13 +63,13 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
         return formatDate;
     }
 
-    function formatPrice(priceToFormat: number): string {
+    function formatPrice(priceToFormat: string): string {
         const formatter = new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL'
         });
 
-        return formatter.format(priceToFormat);
+        return formatter.format(Number(priceToFormat));
     }
 
     async function loadTransactions() {
@@ -90,7 +78,6 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
         if (filter === "") {
             const response = await fetch('http://localhost:3000/transactions');
             const data = await response.json();
-            console.log(data);
             handleSetTransactions(data);
         }
 
@@ -109,8 +96,7 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
             isLoadingTransactions,
             handleSetTransactions,
             getTotal,
-            getTotalIncome,
-            getTotalOutcome,
+            getTotalByType,
             formatDateToString,
             formatPrice
         }}>

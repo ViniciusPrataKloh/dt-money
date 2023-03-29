@@ -4,7 +4,7 @@ import { TransactionsContext } from "../../contexts/TransactionsContext";
 import { SummaryCard, SummaryContainer } from "./styles";
 
 export function Summary() {
-    const { getTotal, getTotalIncome, getTotalOutcome } = useContext(TransactionsContext);
+    const { getTotal, getTotalByType, formatPrice } = useContext(TransactionsContext);
 
     return (
         <SummaryContainer>
@@ -15,7 +15,7 @@ export function Summary() {
                 </header>
 
                 <strong>
-                    {getTotalIncome()}
+                    {formatPrice(getTotalByType('income'))}
                 </strong>
 
             </SummaryCard>
@@ -27,7 +27,7 @@ export function Summary() {
                 </header>
 
                 <strong>
-                    {getTotalOutcome()}
+                    {formatPrice(getTotalByType('outcome'))}
                 </strong>
 
             </SummaryCard>
@@ -39,7 +39,7 @@ export function Summary() {
                 </header>
 
                 <strong>
-                    {getTotal()}
+                    {formatPrice(getTotal())}
                 </strong>
 
             </SummaryCard>
