@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { formatDateToString, formatNumberToPrice } from "../../utils/format";
 import { Loading } from "../Loading";
 import { SearchForm } from "./SearchForm";
 import { PriceHighlight, Table, TransactionContainer } from "./styles";
 
 export function TransactionsTable() {
-    const { transactions, isLoadingTransactions, formatDateToString, formatPrice } = useContext(TransactionsContext);
+    const { transactions, isLoadingTransactions } = useContext(TransactionsContext);
 
     return (
         <TransactionContainer>
@@ -22,7 +23,7 @@ export function TransactionsTable() {
                                     <td width="50%">{transaction.description}</td>
                                     <td>
                                         <PriceHighlight variant={transaction.type}>
-                                            {formatPrice(transaction.price.toString())}
+                                            {formatNumberToPrice(transaction.price)}
                                         </PriceHighlight>
                                     </td>
                                     <td>{transaction.category}</td>
