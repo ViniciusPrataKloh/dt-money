@@ -1,7 +1,7 @@
 import { ArrowCircleDown, ArrowCircleUp, CurrencyDollar } from "phosphor-react";
 import { useContext } from "react";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
-import { formatNumberToPrice } from "../../utils/format";
+import { formatNumberToPrice } from "../../utils/formatter";
 import { SummaryCard, SummaryContainer } from "./styles";
 
 export function Summary() {

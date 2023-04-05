@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
-import { formatDateToString, formatNumberToPrice } from "../../utils/format";
+import { formatDateToString, formatNumberToPrice } from "../../utils/formatter";
 import { Loading } from "../Loading";
 import { SearchForm } from "./SearchForm";
 import { PriceHighlight, Table, TransactionContainer } from "./styles";
@@ -23,11 +23,12 @@ export function TransactionsTable() {
                                     <td width="50%">{transaction.description}</td>
                                     <td>
                                         <PriceHighlight variant={transaction.type}>
+                                            {transaction.type === 'outcome' && '- '}
                                             {formatNumberToPrice(transaction.price)}
                                         </PriceHighlight>
                                     </td>
                                     <td>{transaction.category}</td>
-                                    <td>{formatDateToString(transaction.createdAt)}</td>
+                                    <td>{formatDateToString(new Date(transaction.createdAt))}</td>
                                 </tr>
                             )
                         })}
