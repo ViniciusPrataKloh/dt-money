@@ -13,6 +13,7 @@ export interface ITransactions {
 interface ITransactionsContext {
     transactions: ITransactions[];
     isLoadingTransactions: boolean;
+    loadTransactions: (query: string) => void;
     // handleSetTransactions: (transactions: ITransactions[]) => void;
 }
 
@@ -55,6 +56,7 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
         <TransactionsContext.Provider value={{
             transactions,
             isLoadingTransactions,
+            loadTransactions
             // handleSetTransactions
         }}>
             {children}
