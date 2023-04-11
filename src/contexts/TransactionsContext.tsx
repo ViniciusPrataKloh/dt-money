@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { api } from "../lib/axios";
 
 export interface ITransactions {
     id: string;
@@ -12,7 +13,7 @@ export interface ITransactions {
 interface ITransactionsContext {
     transactions: ITransactions[];
     isLoadingTransactions: boolean;
-    handleSetTransactions: (transactions: ITransactions[]) => void;
+    // handleSetTransactions: (transactions: ITransactions[]) => void;
 }
 
 interface ITransactionsContextProviderProps {
@@ -25,19 +26,21 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
     const [transactions, setTransactions] = useState<ITransactions[]>([]);
     const [isLoadingTransactions, setIsLoadingTransactions] = useState<boolean>(false);
 
-    function handleSetTransactions(transactions: ITransactions[]) {
-        setTransactions(transactions);
-        // setTransactions(state => [...state, data]);
-    }
+    // function handleSetTransactions(transactions: ITransactions[]) {
+    //     setTransactions(transactions);
+    //     // setTransactions(state => [...state, data]);
+    // }
 
-    async function loadTransactions() {
+    async function loadTransactions(query?: string) {
         setIsLoadingTransactions(true);
 
-        // if (filter === "") {
-        const response = await fetch('http://localhost:3000/transactions');
-        const data = await response.json();
-        handleSetTransactions(data);
-        // }
+        const response = await api.get('/transactions', {
+            params: {
+                q: query
+            }
+        });
+
+        setTransactions(response.data);
 
         setIsLoadingTransactions(false);
     }
@@ -52,7 +55,7 @@ export function TransactionsContextProvider({ children }: ITransactionsContextPr
         <TransactionsContext.Provider value={{
             transactions,
             isLoadingTransactions,
-            handleSetTransactions
+            // handleSetTransactions
         }}>
             {children}
         </TransactionsContext.Provider>
