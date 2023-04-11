@@ -13,7 +13,7 @@ export interface ITransactions {
 interface ITransactionsContext {
     transactions: ITransactions[];
     isLoadingTransactions: boolean;
-    loadTransactions: (query: string) => void;
+    loadTransactions: (query: string) => Promise<void>;
     // handleSetTransactions: (transactions: ITransactions[]) => void;
 }
 
