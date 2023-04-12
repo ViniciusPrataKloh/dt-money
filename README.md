@@ -41,7 +41,7 @@ Faça o clone do repositório para ter uma versão do projeto em sua máquina:<b
 ### 🧰 Instalar dependências
 `$ npm install`  
 
-### Iniciar a API json-server
+### 🚀 Iniciar a API json-server
 `$ npm run dev:server`
 
 ### 🚀 Iniciar o projeto front-end
