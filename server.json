@@ -3,7 +3,7 @@
     {
       "id": "1",
       "description": "Desenvolvimento de Software",
-      "price": 12000,
+      "price": 7000,
       "type": "income",
       "category": "Venda",
       "createdAt": "2023-03-25T13:59:28.028Z"
@@ -18,27 +18,19 @@
     },
     {
       "id": "3",
-      "description": "Peça de carro",
-      "price": 200,
+      "description": "Peça de computador",
+      "price": 500,
       "type": "outcome",
       "category": "Manutenção",
       "createdAt": "2023-02-01T13:59:28.028Z"
     },
     {
       "id": "4",
-      "description": "Dividendos",
-      "price": 400,
+      "description": "Desenvolvimento de Site",
+      "price": 2200,
       "type": "income",
-      "category": "Rendimentos",
+      "category": "Venda",
       "createdAt": "2023-02-28T13:59:28.028Z"
-    },
-    {
-      "id": "5",
-      "description": "Dividendos",
-      "price": 390,
-      "type": "income",
-      "category": "Rendimentos",
-      "createdAt": "2023-01-31T13:59:28.028Z"
     },
     {
       "description": "Notebook",
@@ -55,6 +47,14 @@
       "type": "outcome",
       "createdAt": "2023-04-11T23:43:44.839Z",
       "id": "7AgtSh5"
+    },
+    {
+      "description": "Desenvolvimento de App Mobile",
+      "category": "Venda",
+      "price": 8000,
+      "type": "income",
+      "createdAt": "2023-04-12T19:06:36.328Z",
+      "id": "i_Z2o5V"
     }
   ]
 }
