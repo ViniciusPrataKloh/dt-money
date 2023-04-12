@@ -36,8 +36,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ### 💾 Baixar o projeto
 Faça o clone do repositório para ter uma versão do projeto em sua máquina:<br/>
-`$ git clone https://github.com/ViniciusPrataKloh/dt-money.git
-.git`
+`$ git clone https://github.com/ViniciusPrataKloh/dt-money.git`
 
 ### 🧰 Instalar dependências
 `$ npm install`  
