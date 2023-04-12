@@ -1,5 +1,5 @@
 import { Trash } from 'phosphor-react'
-import { useContext } from 'react'
+import { useContextSelector } from 'use-context-selector'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 import { formatDateToString, formatNumberToPrice } from '../../utils/formatter'
 import { Loading } from '../Loading'
@@ -7,11 +7,17 @@ import { SearchForm } from './SearchForm'
 import { PriceHighlight, Table, TransactionContainer } from './styles'
 
 export function TransactionsTable() {
-  const { transactions, isLoadingTransactions, removerTransaction } =
-    useContext(TransactionsContext)
+  const { transactions, isLoadingTransactions, removeTransaction } =
+    useContextSelector(TransactionsContext, (context) => {
+      return {
+        transactions: context.transactions,
+        isLoadingTransactions: context.isLoadingTransactions,
+        removeTransaction: context.removeTransaction,
+      }
+    })
 
   async function handleRemoveTransaction(id: string) {
-    await removerTransaction(id)
+    await removeTransaction(id)
   }
 
   return (

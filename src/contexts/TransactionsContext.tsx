@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
 export interface ITransactions {
@@ -22,7 +23,7 @@ interface ITransactionsContext {
   isLoadingTransactions: boolean
   loadTransactions: (query: string) => Promise<void>
   createNewTransaction: (data: createNewTransactionProps) => Promise<void>
-  removerTransaction: (id: string) => Promise<void>
+  removeTransaction: (id: string) => Promise<void>
 }
 
 interface ITransactionsContextProviderProps {
@@ -38,26 +39,7 @@ export function TransactionsContextProvider({
   const [isLoadingTransactions, setIsLoadingTransactions] =
     useState<boolean>(false)
 
-  async function createNewTransaction(data: createNewTransactionProps) {
-    const { description, category, price, type } = data
-
-    const response = await api.post('transactions', {
-      description,
-      category,
-      price,
-      type,
-      createdAt: new Date(),
-    })
-
-    setTransactions((state) => [...state, response.data])
-  }
-
-  async function removerTransaction(id: string) {
-    await api.delete(`/transactions/${id}`)
-    loadTransactions()
-  }
-
-  async function loadTransactions(query?: string) {
+  const loadTransactions = useCallback(async (query?: string) => {
     setIsLoadingTransactions(true)
 
     const response = await api.get(
@@ -71,11 +53,36 @@ export function TransactionsContextProvider({
 
     setTransactions(response.data)
     setIsLoadingTransactions(false)
-  }
+  }, [])
+
+  const createNewTransaction = useCallback(
+    async (data: createNewTransactionProps) => {
+      const { description, category, price, type } = data
+
+      const response = await api.post('transactions', {
+        description,
+        category,
+        price,
+        type,
+        createdAt: new Date(),
+      })
+
+      setTransactions((state) => [...state, response.data])
+    },
+    [],
+  )
+
+  const removeTransaction = useCallback(
+    async (id: string) => {
+      await api.delete(`/transactions/${id}`)
+      await loadTransactions()
+    },
+    [loadTransactions],
+  )
 
   useEffect(() => {
     loadTransactions()
-  }, [])
+  }, [loadTransactions])
 
   return (
     <TransactionsContext.Provider
@@ -84,7 +91,7 @@ export function TransactionsContextProvider({
         isLoadingTransactions,
         loadTransactions,
         createNewTransaction,
-        removerTransaction,
+        removeTransaction,
       }}
     >
       {children}
