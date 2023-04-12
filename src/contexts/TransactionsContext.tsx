@@ -22,6 +22,7 @@ interface ITransactionsContext {
   isLoadingTransactions: boolean
   loadTransactions: (query: string) => Promise<void>
   createNewTransaction: (data: createNewTransactionProps) => Promise<void>
+  removerTransaction: (id: string) => Promise<void>
 }
 
 interface ITransactionsContextProviderProps {
@@ -51,14 +52,22 @@ export function TransactionsContextProvider({
     setTransactions((state) => [...state, response.data])
   }
 
+  async function removerTransaction(id: string) {
+    await api.delete(`/transactions/${id}`)
+    loadTransactions()
+  }
+
   async function loadTransactions(query?: string) {
     setIsLoadingTransactions(true)
 
-    const response = await api.get('/transactions', {
-      params: {
-        q: query,
+    const response = await api.get(
+      '/transactions/?_sort=createdAt&_order=desc',
+      {
+        params: {
+          q: query,
+        },
       },
-    })
+    )
 
     setTransactions(response.data)
     setIsLoadingTransactions(false)
@@ -75,6 +84,7 @@ export function TransactionsContextProvider({
         isLoadingTransactions,
         loadTransactions,
         createNewTransaction,
+        removerTransaction,
       }}
     >
       {children}

@@ -25,6 +25,20 @@ export const Table = styled.table`
     &:last-child {
       border-top-right-radius: 6px;
       border-bottom-right-radius: 6px;
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: 0;
+        color: ${(props) => props.theme['gray-400']};
+
+        &:hover {
+          color: ${(props) => props.theme['red-700']};
+          transition: color 0.2s;
+        }
+      }
     }
   }
 `
