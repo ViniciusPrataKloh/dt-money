@@ -1,80 +1,83 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import { api } from "../lib/axios";
+import { createContext, ReactNode, useEffect, useState } from 'react'
+import { api } from '../lib/axios'
 
 export interface ITransactions {
-    id: string;
-    description: string;
-    price: number;
-    type: 'income' | 'outcome';
-    category: string;
-    createdAt: any;
-}
-
-interface ITransactionsContext {
-    transactions: ITransactions[];
-    isLoadingTransactions: boolean;
-    loadTransactions: (query: string) => Promise<void>;
-    createNewTransaction: (data: createNewTransactionProps) => Promise<void>;
-}
-
-interface ITransactionsContextProviderProps {
-    children: ReactNode;
+  id: string
+  description: string
+  price: number
+  type: 'income' | 'outcome'
+  category: string
+  createdAt: any
 }
 
 interface createNewTransactionProps {
-    description: string;
-    price: number;
-    type: 'income' | 'outcome';
-    category: string;
+  description: string
+  price: number
+  type: 'income' | 'outcome'
+  category: string
 }
 
-export const TransactionsContext = createContext({} as ITransactionsContext);
+interface ITransactionsContext {
+  transactions: ITransactions[]
+  isLoadingTransactions: boolean
+  loadTransactions: (query: string) => Promise<void>
+  createNewTransaction: (data: createNewTransactionProps) => Promise<void>
+}
 
-export function TransactionsContextProvider({ children }: ITransactionsContextProviderProps) {
-    const [transactions, setTransactions] = useState<ITransactions[]>([]);
-    const [isLoadingTransactions, setIsLoadingTransactions] = useState<boolean>(false);
+interface ITransactionsContextProviderProps {
+  children: ReactNode
+}
 
-    async function createNewTransaction(data: createNewTransactionProps) {
-        const { description, category, price, type } = data;
+export const TransactionsContext = createContext({} as ITransactionsContext)
 
-        const response = await api.post('transactions', {
-            description,
-            category,
-            price,
-            type,
-            createdAt: new Date()
-        });
+export function TransactionsContextProvider({
+  children,
+}: ITransactionsContextProviderProps) {
+  const [transactions, setTransactions] = useState<ITransactions[]>([])
+  const [isLoadingTransactions, setIsLoadingTransactions] =
+    useState<boolean>(false)
 
-        setTransactions(state => [...state, response.data]);
-    }
+  async function createNewTransaction(data: createNewTransactionProps) {
+    const { description, category, price, type } = data
 
-    async function loadTransactions(query?: string) {
-        setIsLoadingTransactions(true);
+    const response = await api.post('transactions', {
+      description,
+      category,
+      price,
+      type,
+      createdAt: new Date(),
+    })
 
-        const response = await api.get('/transactions', {
-            params: {
-                q: query
-            }
-        });
+    setTransactions((state) => [...state, response.data])
+  }
 
-        setTransactions(response.data);
-        setIsLoadingTransactions(false);
-    }
+  async function loadTransactions(query?: string) {
+    setIsLoadingTransactions(true)
 
-    useEffect(() => {
-        if (transactions.length === 0) {
-            loadTransactions();
-        }
-    }, []);
+    const response = await api.get('/transactions', {
+      params: {
+        q: query,
+      },
+    })
 
-    return (
-        <TransactionsContext.Provider value={{
-            transactions,
-            isLoadingTransactions,
-            loadTransactions,
-            createNewTransaction
-        }}>
-            {children}
-        </TransactionsContext.Provider>
-    )
+    setTransactions(response.data)
+    setIsLoadingTransactions(false)
+  }
+
+  useEffect(() => {
+    loadTransactions()
+  }, [])
+
+  return (
+    <TransactionsContext.Provider
+      value={{
+        transactions,
+        isLoadingTransactions,
+        loadTransactions,
+        createNewTransaction,
+      }}
+    >
+      {children}
+    </TransactionsContext.Provider>
+  )
 }
